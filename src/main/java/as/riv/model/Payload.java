@@ -2,8 +2,10 @@ package as.riv.model;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
 
+@JsonPropertyOrder({ "timestamp", "payload" })
 public class Payload {
 
 	public Date timestamp;
