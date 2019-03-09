@@ -17,8 +17,6 @@ public class PayloadRepository {
 	}
 
 	public void addPayload(Payload payload) {
-		list.getPayloadList().add(payload);
-
 		if (list.getPayloadList().size() < MAX_PAYLOADS) {
 			list.getPayloadList().add(payload);
 		} else {

@@ -2,16 +2,16 @@ package as.riv.model;
 
 import java.util.Date;
 
-import org.json.JSONObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class Payload {
 
 	public Date timestamp;
 
-	public JSONObject payload;
+	public JsonNode payload;
 
-	public Payload(String payload) {
-		this.payload = new JSONObject(payload);
+	public Payload(JsonNode payload) {
+		this.payload = payload;
 		this.timestamp = new Date();
 	}
 
@@ -23,11 +23,11 @@ public class Payload {
 		this.timestamp = timestamp;
 	}
 
-	public JSONObject getPayload() {
+	public JsonNode getPayload() {
 		return payload;
 	}
 
-	public void setPayload(JSONObject payload) {
+	public void setPayload(JsonNode payload) {
 		this.payload = payload;
 	}
 

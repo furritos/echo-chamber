@@ -14,7 +14,7 @@ public class Payloads {
 		return payloads;
 	}
 
-	public void setEmployeeList(List<Payload> payloads) {
+	public void setPayloadList(List<Payload> payloads) {
 		this.payloads = payloads;
 	}
 
