@@ -28,7 +28,7 @@ public class WebhookController {
 
 	@PostMapping(path = "/webhook", consumes = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void newPostWebHook(@RequestBody String message) throws IOException {
+	public void postWebHook(@RequestBody String message) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode node = mapper.readTree(message);
 		Payload payload = new Payload(node);
@@ -36,7 +36,7 @@ public class WebhookController {
 	}
 
 	@GetMapping(path = "/webhook", produces = "application/json")
-	public @ResponseBody List<Payload> newGetWebHook() {
+	public @ResponseBody List<Payload> getWebHook() {
 		return repository.getAllPayloads().getPayloadList();
 	}
 
