@@ -9,11 +9,12 @@
 		<version>2.1.3.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>as.riv</groupId>
-	<artifactId>webhook-io</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>webhook-io</name>
-	<description>A Simple Webhook Listener using Spring</description>
+	<artifactId>simple-rest-server</artifactId>
+	<version>1.0</version>
+	<name>Simple Spring Boot REST Server</name>
+	<description>A Simple Spring Boot REST Server that captures and echoes webhooks</description>
 
 	<properties>
 		<java.version>1.8</java.version>
