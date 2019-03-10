@@ -1,11 +1,11 @@
 package as.riv.controller;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,31 +13,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import as.riv.model.Payload;
-import as.riv.repository.PayloadRepository;
+import as.riv.model.APIKey;
+import as.riv.service.APIKeyService;
 
 @RestController
 @RequestMapping(path = "/api")
 public class WebhookController {
 
 	@Autowired
-	private PayloadRepository repository;
+	private APIKeyService service;
 
-	@PostMapping(path = "/webhook", consumes = "application/json")
+	@PostMapping(path = "/webhook/{uuid}", consumes = "application/json")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void postWebHook(@RequestBody String message) throws IOException {
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode node = mapper.readTree(message);
-		Payload payload = new Payload(node);
-		repository.addPayload(payload);
+	public void post(@RequestBody String message, @PathVariable String uuid) throws IOException {
+		service.populate(uuid, message);
 	}
 
-	@GetMapping(path = "/webhook", produces = "application/json")
-	public @ResponseBody List<Payload> getWebHook() {
-		return repository.getAllPayloads().getPayloadList();
+	@GetMapping(path = "/webhook/{uuid}", produces = "application/json")
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody APIKey get(@PathVariable String uuid) {
+		return service.get(uuid);
 	}
 
+	@GetMapping(path = "/uuid", produces = "application/json")
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody APIKey register() {
+		return service.register();
+	}
 }
