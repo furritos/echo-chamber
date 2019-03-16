@@ -23,29 +23,9 @@ public class APIKeyService {
 
 	private final static int MAX_HOURS = 24;
 
-	public APIKey register() {
+	public APIKey provision() {
 		APIKey apikey = new APIKey();
 		submit(apikey);
-		return apikey;
-	}
-
-	public void populate(String uuid, String message) {
-		Optional<APIKey> instance = repository.findById(UUID.fromString(uuid));
-		APIKey apikey = instance.get();
-		ObjectMapper mapper = new ObjectMapper();
-		JsonNode node = null;
-		try {
-			node = mapper.readTree(message);
-			Payload payload = new Payload(node);
-			apikey.getPayloads().add(payload);
-		} catch (IOException e) {
-			System.out.println("Something went wrong in populating " + uuid);
-		}
-	}
-
-	public APIKey get(String uuid) {
-		Optional<APIKey> instance = repository.findById(UUID.fromString(uuid));
-		APIKey apikey = instance.get();
 		return apikey;
 	}
 
@@ -60,12 +40,18 @@ public class APIKeyService {
 		setExpirationDate(apikey);
 	}
 
-	private void setUUID(APIKey apikey) {
-		apikey.setApikey(UUID.randomUUID());
-	}
-
-	private void setExpirationDate(APIKey apikey) {
-		apikey.setExpires(LocalDateTime.now().plusHours(MAX_HOURS));
+	public void record(String uuid, String message) {
+		Optional<APIKey> instance = repository.findById(UUID.fromString(uuid));
+		APIKey apikey = instance.get();
+		ObjectMapper mapper = new ObjectMapper();
+		JsonNode node = null;
+		try {
+			node = mapper.readTree(message);
+			Payload payload = new Payload(node);
+			apikey.getPayloads().add(payload);
+		} catch (IOException e) {
+			apikey.setMessage("FAILURE | Payload was not of type JSON");
+		}
 	}
 
 	private void setStatusMessage(APIKey apikey) {
@@ -74,6 +60,20 @@ public class APIKeyService {
 		} else {
 			apikey.setMessage("FAILURE | Try again later");
 		}
+	}
+
+	public APIKey retrieve(String uuid) {
+		Optional<APIKey> instance = repository.findById(UUID.fromString(uuid));
+		APIKey apikey = instance.get();
+		return apikey;
+	}
+
+	private void setUUID(APIKey apikey) {
+		apikey.setApikey(UUID.randomUUID());
+	}
+
+	private void setExpirationDate(APIKey apikey) {
+		apikey.setExpires(LocalDateTime.now().plusHours(MAX_HOURS));
 	}
 
 }
