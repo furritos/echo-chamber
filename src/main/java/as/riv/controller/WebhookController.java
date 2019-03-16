@@ -23,21 +23,22 @@ public class WebhookController {
 	@Autowired
 	private APIKeyService service;
 
-	@PostMapping(path = "/webhook/{uuid}", consumes = "application/json")
-	@ResponseStatus(HttpStatus.CREATED)
-	public void post(@RequestBody String message, @PathVariable String uuid) throws IOException {
-		service.populate(uuid, message);
+	@GetMapping(path = "/uuid", produces = "application/json")
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody APIKey get() {
+		return service.provision();
 	}
 
 	@GetMapping(path = "/webhook/{uuid}", produces = "application/json")
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody APIKey get(@PathVariable String uuid) {
-		return service.get(uuid);
+		return service.retrieve(uuid);
 	}
 
-	@GetMapping(path = "/uuid", produces = "application/json")
-	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody APIKey register() {
-		return service.register();
+	@PostMapping(path = "/webhook/{uuid}", consumes = "application/json")
+	@ResponseStatus(HttpStatus.CREATED)
+	public void post(@RequestBody String message, @PathVariable String uuid) throws IOException {
+		service.record(uuid, message);
 	}
+
 }
