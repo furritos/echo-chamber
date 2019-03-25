@@ -1,6 +1,6 @@
 package as.riv.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -8,20 +8,20 @@ import com.fasterxml.jackson.databind.JsonNode;
 @JsonPropertyOrder({ "timestamp", "payload" })
 public class Payload {
 
-	public Date timestamp;
+	public LocalDateTime timestamp;
 
 	public JsonNode payload;
 
 	public Payload(JsonNode payload) {
 		this.payload = payload;
-		this.timestamp = new Date();
+		this.timestamp = LocalDateTime.now();
 	}
 
-	public Date getTimestamp() {
+	public LocalDateTime getTimestamp() {
 		return timestamp;
 	}
 
-	public void setTimestamp(Date timestamp) {
+	public void setTimestamp(LocalDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
 
