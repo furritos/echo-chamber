@@ -21,7 +21,7 @@ public class APIKeyService {
 	@Autowired
 	private APIKeyRepository repository;
 
-	private final static int MAX_HOURS = 24;
+	private final static int MAX_HOURS = 2;
 
 	public APIKey provision() {
 		APIKey apikey = new APIKey();
@@ -73,7 +73,7 @@ public class APIKeyService {
 	}
 
 	private void setExpirationDate(APIKey apikey) {
-		apikey.setExpires(LocalDateTime.now().plusHours(MAX_HOURS));
+		apikey.setExpires(LocalDateTime.now().minusHours(MAX_HOURS));
 	}
 
 }

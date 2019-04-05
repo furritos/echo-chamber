@@ -1,6 +1,7 @@
 package as.riv.repository;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.repository.CrudRepository;
@@ -11,6 +12,9 @@ import as.riv.model.APIKey;
 public interface APIKeyRepository extends CrudRepository<APIKey, UUID> {
 
 	@Transactional
-	void deleteByExpiresBefore(Date expiryDate);
+	List<APIKey> findByExpiresBefore(LocalDateTime expiryDate);
+
+	@Transactional
+	void deleteByExpiresBefore(LocalDateTime expiryDate);
 
 }
