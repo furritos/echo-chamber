@@ -5,15 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.annotation.Id;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
+@Entity
 public class APIKey {
 
 	@Id
-	private UUID apikey;
+	private UUID apikey = UUID.randomUUID();
+
 	private LocalDateTime expires;
+
 	private String message;
-	private List<Payload> payloads = new ArrayList<Payload>();
 
 	public UUID getApikey() {
 		return apikey;
@@ -37,17 +40,6 @@ public class APIKey {
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public List<Payload> getPayloads() {
-		if (payloads == null) {
-			payloads = new ArrayList<Payload>();
-		}
-		return payloads;
-	}
-
-	public void setPayloads(List<Payload> payloads) {
-		this.payloads = payloads;
 	}
 
 }

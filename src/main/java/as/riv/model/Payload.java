@@ -2,19 +2,45 @@ package as.riv.model;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
 import com.fasterxml.jackson.databind.JsonNode;
 
-@JsonPropertyOrder({ "timestamp", "payload" })
+@Entity
 public class Payload {
 
-	public Date timestamp;
+	@Id
+	private long id;
 
-	public JsonNode payload;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private APIKey apikey;
+
+	private Date timestamp;
+
+	private JsonNode payload;
 
 	public Payload(JsonNode payload) {
 		this.payload = payload;
 		this.timestamp = new Date();
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public APIKey getApikey() {
+		return apikey;
+	}
+
+	public void setApikey(APIKey apikey) {
+		this.apikey = apikey;
 	}
 
 	public Date getTimestamp() {

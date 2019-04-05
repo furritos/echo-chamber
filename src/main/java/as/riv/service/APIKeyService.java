@@ -14,12 +14,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import as.riv.model.APIKey;
 import as.riv.model.Payload;
 import as.riv.repository.APIKeyRepository;
+import as.riv.repository.PayloadRepository;
 
 @Service
 public class APIKeyService {
 
 	@Autowired
-	private APIKeyRepository repository;
+	private APIKeyRepository apikeyRepository;
+
+	@Autowired
+	private PayloadRepository payloadRepository;
 
 	private final static int MAX_HOURS = 24;
 
@@ -30,38 +34,30 @@ public class APIKeyService {
 	}
 
 	public void populate(String uuid, String message) {
-		Optional<APIKey> instance = repository.findById(UUID.fromString(uuid));
+		Optional<APIKey> instance = apikeyRepository.findById(UUID.fromString(uuid));
 		APIKey apikey = instance.get();
 		ObjectMapper mapper = new ObjectMapper();
 		JsonNode node = null;
 		try {
 			node = mapper.readTree(message);
 			Payload payload = new Payload(node);
-			apikey.getPayloads().add(payload);
+			payload.setApikey(apikey);
+			payloadRepository.save(payload);
 		} catch (IOException e) {
 			System.out.println("Something went wrong in populating " + uuid);
 		}
 	}
 
 	public APIKey get(String uuid) {
-		Optional<APIKey> instance = repository.findById(UUID.fromString(uuid));
+		Optional<APIKey> instance = apikeyRepository.findById(UUID.fromString(uuid));
 		APIKey apikey = instance.get();
 		return apikey;
 	}
 
 	private void submit(APIKey apikey) {
-		populate(apikey);
-		setStatusMessage(apikey);
-		repository.save(apikey);
-	}
-
-	private void populate(APIKey apikey) {
-		setUUID(apikey);
 		setExpirationDate(apikey);
-	}
-
-	private void setUUID(APIKey apikey) {
-		apikey.setApikey(UUID.randomUUID());
+		setStatusMessage(apikey);
+		apikeyRepository.save(apikey);
 	}
 
 	private void setExpirationDate(APIKey apikey) {
